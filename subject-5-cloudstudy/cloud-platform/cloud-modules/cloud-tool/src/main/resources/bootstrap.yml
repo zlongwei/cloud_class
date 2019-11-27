@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: cloud-tool
+  cloud:
+    #nacos配置
+    nacos:
+      discovery:
+        server-addr: 148.70.96.49:8848
+      config:
+        server-addr: 148.70.96.49:8848
+        #file-extension: yaml
+    #sentinel配置
+    sentinel:
+      transport:
+        port: 8769
+        dashboard: 148.70.96.49:8080

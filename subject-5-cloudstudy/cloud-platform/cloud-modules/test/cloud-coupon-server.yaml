@@ -1,0 +1,56 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: cloud-coupon-server
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    joda-date-time-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non-null
+
+  datasource:
+    # 使用druid数据源
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:148.70.96.49}:${MYSQL_PORT:3308}/course_coupon?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: root
+    # Hikari will use the above plus the following to setup connection pooling
+    type: com.zaxxer.hikari.HikariDataSource
+    # druid pool
+    hikari:
+      pool-name: course_coupon
+      minimum-idle: 1
+      maximum-pool-size: 20
+      auto-commit: true
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: select 1
+    
+  redis:
+    pool:
+      maxIdle: 100
+      maxWait: 1000 
+    host: 148.70.96.49
+    port: 6379
+    password: redis123456
+    timeout: 2000
+    
+mybatis:
+  type-aliases-package: com.study.coupon.bean
+  mapper-locations: "classpath*:mapper/*Mapper.xml"
+#    static-path-pattern: /resources/**
+
+# 配置需要拦截，做权限验证的地址
+auth:
+  client:
+    include-path-patterns:
+      - "/coupon/op/**"
+      - "/coupon/detail/**"
+    id: cloud-coupon-server
+    secret: 123456
+    token-header: x-client-token
+  user:
+    token-header: Authorization
+  serviceId: cloud-auth

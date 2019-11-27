@@ -1,0 +1,81 @@
+version:  '3'
+services:
+  # 定义auth服务
+  cloud-auth:
+    image: 148.70.96.49/study/cloud-auth:1.0
+    ports:
+      - "9777:9777"
+    networks:
+      - cloud
+    environment:
+      - REDIS_HOST=148.70.96.49
+      - REDIS_PORT=6379
+      - MYSQL_HOST=148.70.96.49
+      - MYSQL_PORT=3308
+      - RABBIT_MQ_HOST=148.70.96.49
+      - RABBIT_MQ_PORT=5672
+      - ZIPKIN_URL=148.70.96.49
+      - ZIPKIN_PORT=9411
+    #cloud-redis:
+    #  image: redis
+    #  ports:
+    #    - "6379:6379"
+    #volumes:
+    #  - ./redis-data:/data
+  cloud-admin:
+    image: 148.70.96.49/study/cloud-admin:1.0
+    ports:
+      - "8762:8762"
+    networks:
+      - cloud
+    depends_on:
+      - cloud-auth
+    links:
+      - cloud-auth
+    environment:
+      - MYSQL_HOST=148.70.96.49
+      - MYSQL_PORT=3308
+      - RABBIT_MQ_HOST=148.70.96.49
+      - RABBIT_MQ_PORT=5672
+      - REDIS_HOST=148.70.96.49
+      - REDIS_PORT=6379
+      - ZIPKIN_URL=148.70.96.49
+      - ZIPKIN_PORT=9411
+  cloud-gateway:
+    image: 148.70.96.49/study/cloud-gateway:1.0
+    ports:
+      - "8765:8765"
+    networks:
+      - cloud
+    depends_on:
+      - cloud-auth
+    links:
+      - cloud-auth
+    environment:
+      - RABBIT_MQ_HOST=148.70.96.49
+      - RABBIT_MQ_PORT=5672
+      - REDIS_HOST=148.70.96.49
+      - REDIS_PORT=6379
+      - ZIPKIN_URL=148.70.96.49
+      - ZIPKIN_PORT=9411
+    # 限制资源的使用
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 200M
+
+# docker-compose.yml文件会读取系统以及本目录下的.env文件变量
+# .env文件内容
+# redis
+# REDIS_DIR=./redis
+#
+# mysql
+# MYSQL_DIR=./mysql
+# MYSQL_ROOT_PASSWORD=root
+
+# 自定义网络
+networks:
+  # 自定义网络名字
+  cloud:
+    driver: bridge

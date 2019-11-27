@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.study.coupon.mapper.TbCouponMapper" >
+
+  <resultMap id="BaseResultMap" type="com.study.coupon.bean.TbCoupon" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="coupon_type" property="couponType" jdbcType="INTEGER" />
+    <result column="coupon_content" property="couponContent" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="coupon_sum" property="couponSum" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, coupon_type, coupon_content, start_time, end_time, coupon_sum
+  </sql>
+
+  <insert id="insert" parameterType="com.study.coupon.bean.TbCoupon" >
+    insert into tb_coupon (<include refid="Base_Column_List"/>)
+    values (
+      #{couponId},
+      #{couponType},
+      #{couponContent},
+      #{startTime},
+      #{endTime},
+      #{couponSum})
+  </insert>
+
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    delete from tb_coupon where id = #{id}
+  </delete>
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.study.coupon.bean.TbCoupon" >
+    select
+    <include refid="Base_Column_List" />
+    <![CDATA[
+    from tb_coupon where start_time <= NOW() and end_time >= NOW()
+     ]]>
+  </select>
+
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_coupon
+    <set >
+      <if test="record.couponType != null" >
+        coupon_type = #{record.couponType},
+      </if>
+      <if test="record.couponContent != null" >
+        coupon_content = #{record.couponContent},
+      </if>
+      <if test="record.startTime != null" >
+        start_time = #{record.startTime},
+      </if>
+      <if test="record.endTime != null" >
+        end_time = #{record.endTime},
+      </if>
+      <if test="record.couponSum != null" >
+        coupon_sum = #{record.couponSum},
+      </if>
+    </set>
+    where id = #{record.id}
+  </update>
+</mapper>

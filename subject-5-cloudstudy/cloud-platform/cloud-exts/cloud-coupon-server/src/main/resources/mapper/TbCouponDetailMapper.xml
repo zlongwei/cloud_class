@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.study.coupon.mapper.TbCouponDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.study.coupon.bean.TbCouponDetail">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="coupon_id" property="couponId" jdbcType="INTEGER"/>
+        <result column="coupon_detail_status" property="couponDetailStatus" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="order_id" property="orderId" jdbcType="INTEGER"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+      id, coupon_id, coupon_detail_status, user_id, order_id, start_time, end_time
+    </sql>
+
+    <insert id="insert" parameterType="com.study.coupon.bean.TbCouponDetail">
+        insert into tb_coupon_detail (<include refid="Base_Column_List"/>)
+        values (
+        #{couponDetailId},
+        #{couponId},
+        #{couponDetailStatus},
+        #{userId},
+        #{orderId},
+        #{startTime},
+        #{endTime})
+    </insert>
+
+    <delete id="deleteByTbCouponDetail" parameterType="com.study.coupon.bean.TbCouponDetail">
+        delete from tb_coupon_detail where id = #{id}
+    </delete>
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.study.coupon.bean.TbCouponDetail">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_coupon_detail
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_coupon_detail where id = #{id}
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map">
+        update tb_coupon_detail
+        <set>
+            <if test="record.id != null">
+                id = #{record.id},
+            </if>
+            <if test="record.couponId != null">
+                coupon_id = #{record.couponId},
+            </if>
+            <if test="record.couponDetailStatus != null">
+                coupon_detail_status = #{record.couponDetailStatus},
+            </if>
+            <if test="record.userId != null">
+                user_id = #{record.userId},
+            </if>
+            <if test="record.orderId != null">
+                order_id = #{record.orderId},
+            </if>
+            <if test="record.startTime != null">
+                start_time = #{record.startTime},
+            </if>
+            <if test="record.endTime != null">
+                end_time = #{record.endTime},
+            </if>
+        </set>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.study.coupon.bean.TbCouponDetail">
+        update tb_coupon_detail
+        <set>
+            <if test="couponId != null">
+                coupon_id = #{couponId},
+            </if>
+            <if test="couponDetailStatus != null">
+                coupon_detail_status = #{couponDetailStatus},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="orderId != null">
+                order_id = #{orderId},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.study.coupon.bean.TbCouponDetail">
+    update tb_coupon_detail
+    set coupon_id = #{couponId},
+      coupon_detail_status = #{couponDetailStatus},
+      user_id = #{userId},
+      order_id = #{orderId},
+      start_time = #{startTime},
+      end_time = #{endTime}
+    where id = #{id}
+  </update>
+
+</mapper>
